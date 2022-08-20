@@ -2,8 +2,9 @@ from django.shortcuts import render
 from django.views.generic import ListView, DetailView, UpdateView, DeleteView, CreateView
 from django.http import HttpResponseRedirect
 
+from django.contrib.auth.models import User
 from presets.models import Preset
-from presets.forms import upload_preset
+from presets.forms import UploadPresetForm
 
 import tarfile
 
@@ -29,9 +30,32 @@ def upload_preset(request):
 
         return HttpResponseRedirect('/')
 
-    return render(request, 'create.html', {"form": upload_preset})
+    return render(request, 'create.html', {"form": UploadPresetForm})
 
 
+class ListAllPresetsView(ListView): ###TEST
+    model = Preset
+    template_name = "main.html"
+    context_object_name = "presets"
+
+
+class DetailPresetView(DetailView):
+    model = Preset
+    template_name = "detail.html"
+    context_object_name = "preset"
+
+
+class EditPresetView(UpdateView):
+    model = Preset
+    template_name = "edit.html"
+    fields = 'title', 'description'
+    success_url = '/'
+
+
+class DeletePresetView(DeleteView):
+    model = Preset
+    template_name = "delete.html"
+    success_url = '/'
 
 
 

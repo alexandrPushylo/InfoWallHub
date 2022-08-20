@@ -1,6 +1,7 @@
 from django import forms
 
-class upload_preset(forms.Form):
+
+class UploadPresetForm(forms.Form):
     archive = forms.FileField(label="Архив")
     title = forms.CharField(max_length=255, label="Название")
     description = forms.CharField(max_length=512, widget=forms.Textarea, label="Описание")
