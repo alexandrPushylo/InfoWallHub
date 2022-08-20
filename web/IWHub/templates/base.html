@@ -36,16 +36,18 @@
 
              <li><a class="dropdown-item" href="{% url 'create' %}">Добавить пресет</a></li>
                 <hr>
-                <li><a class="dropdown-item" href="#">Another action</a></li>
+             <li><a class="dropdown-item" href="#">Another action</a></li>
              <li><a class="dropdown-item" href="#">Something else here</a></li>
+                <hr>
+             <li><a class="dropdown-item" href="{% url 'logout' %}">Выйти</a></li>
 
             </ul>
         </div>
 
         {% else %}
             <div class="btn-group">
-                <a href="#" class="btn btn-primary active" aria-current="page">Вход</a>
-                <a href="#" class="btn btn-primary">Регистрация</a>
+                <a href="{% url 'sign_in' %}" class="btn btn-primary active" aria-current="page">Вход</a>
+                <a href="{% url 'sign_up' %}" class="btn btn-primary">Регистрация</a>
 
             </div>
         {% endif %}

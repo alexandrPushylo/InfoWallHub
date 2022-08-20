@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.views.generic import ListView, DetailView, UpdateView, DeleteView, CreateView
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
+from django.contrib.auth import logout, authenticate, login
 
 from django.contrib.auth.models import User
 from presets.models import Preset
@@ -58,4 +59,38 @@ class DeletePresetView(DeleteView):
     success_url = '/'
 
 
+def logout_view(request):
+    logout(request)
+    return HttpResponseRedirect('/')
+
+
+def signin_view(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return HttpResponseRedirect('/')    ###Redirect to a success page.
+        else:
+            return HttpResponse('invalid login')
+
+    return render(request, 'signin.html', {})
+
+
+def signup_view(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        first_name = request.POST['first_name']
+        last_name = request.POST['last_name']
+        email = request.POST['email']
+
+        new_user = User.objects.create_user(username=username, password=password,
+                                            email=email, first_name=first_name, last_name=last_name,
+                                            is_staff=False, is_superuser=False)
+        new_user.save()
+        login(request, new_user)
+        return HttpResponseRedirect('/')
+    return render(request, 'signup.html', {})
 

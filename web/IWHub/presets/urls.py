@@ -4,6 +4,7 @@ from django.http import HttpResponse
 from presets.views import upload_preset, DetailPresetView, DeletePresetView, EditPresetView
 from presets.views import ListAllPresetsView
 
+
 def test(request):
     msg = "Test"
     return HttpResponse(f"{msg}\n\n{request}")
