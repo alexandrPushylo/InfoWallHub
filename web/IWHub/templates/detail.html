@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container m-2">
+    <div class="card" style="width: 45rem;">
+      <img src="{{preset.image}}" class="card-img-top" alt="...">
+      <div class="card-body">
+        <p class="card-text"> {{preset.description}}</p>
+      </div>
+    </div>
+</div>
+
+{% endblock %}

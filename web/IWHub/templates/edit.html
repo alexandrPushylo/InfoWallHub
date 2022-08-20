@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="card" style="width: 28rem; ">
+  <div class="card-body">
+    <h5 class="card-title">Редактирование</h5>
+
+    <p class="card-text"><form action="" method="post">
+        {% for i in form %}
+
+        <lable for="item">{{i.name}}</lable>
+        <p id="item">{{i}}</p>
+        {%endfor%}
+        {% csrf_token %}
+<!--        {{form.as_p}}-->
+        <input class="btn btn-primary" type="submit" value="Save">
+
+        </form></p>
+
+  </div>
+</div>
+{% endblock %}
