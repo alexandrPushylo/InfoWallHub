@@ -3,7 +3,7 @@ from django.http import HttpResponse
 
 from presets.views import upload_preset, DetailPresetView, DeletePresetView, EditPresetView
 from presets.views import ListAllPresetsView, ListPrivatePresetsView, ListPublicPresetsView,ListPresetsView
-
+from presets.views import detail_preset_view
 
 def test(request):
     msg = "Test"
@@ -15,8 +15,10 @@ urlpatterns = [
     path('library', ListPresetsView.as_view(), name="library"),
     path('private', ListPresetsView.as_view(), name="private"),
 
-    path('<int:pk>', DetailPresetView.as_view(), name="detail"),
+    # path('<int:pk>', DetailPresetView.as_view(), name="detail"),
+    path('<int:pk>', detail_preset_view, name="detail"),
     path('edit/<int:pk>', EditPresetView.as_view(), name="edit"),
+
     path('delete/<int:pk>', DeletePresetView.as_view(), name="delete"),
     # path('search/',),
     path('create/', upload_preset, name="create"),

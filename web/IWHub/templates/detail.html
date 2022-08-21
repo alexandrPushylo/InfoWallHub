@@ -3,13 +3,33 @@
 {% block content %}
 <div class="container m-2">
     <div class="card" style="width: 45rem;">
-      <img src="{{preset.image}}" class="card-img-top" alt="...">
+      <img src="{{image}}" class="card-img-top" alt="...">
       <div class="card-body">
-        <p class="card-text"> {{preset.description}}</p>
-        <p class="card-text"> {{preset.archive}}</p>
-        <a href="{{ preset.archive }}" class="btn btn-secondary">Скачать пресет </a>
+        <p class="card-text"> {{description}}</p>
+        <p class="card-text"> {{archive}}</p>
+
+        <div style="padding-right: 0px">
+            <a href="{{ archive }}" class="btn btn-secondary">Скачать пресет </a>
+            <form action="" method="post">{% csrf_token %}
+              <div class="dropup-center dropup">
+                  <button class="btn  dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                     {{ rating }}
+                    </button>
+                    <ul class="dropdown-menu" style="width: 20rem">
+                     <li><input class="dropdown-item" type="submit" value="1" name="vote"></li>
+                     <li><input class="dropdown-item" type="submit" value="2" name="vote"></li>
+                     <li><input class="dropdown-item" type="submit" value="3" name="vote"></li>
+                     <li><input class="dropdown-item" type="submit" value="4" name="vote"></li>
+                     <li><input class="dropdown-item" type="submit" value="5" name="vote"></li>
+
+                     </ul>
+              </div>
+            </form>
+
+        </div>
+
       </div>
     </div>
 </div>
-
+{{ info }}
 {% endblock %}

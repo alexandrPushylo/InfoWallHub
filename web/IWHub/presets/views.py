@@ -4,13 +4,50 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth import logout, authenticate, login
 from django.db.models import Q
 
+from django.core.exceptions import ObjectDoesNotExist
+
 from django.contrib.auth.models import User
-from presets.models import Preset
-from presets.forms import UploadPresetForm
+from presets.models import Preset, Vote
+from presets.forms import UploadPresetForm, DetailPresetForm
 
 import tarfile
+from math import fabs
 
 # Create your views here.
+def detail_preset_view(request,pk):
+    form = {}
+    preset = Preset.objects.get(pk=pk)
+    form['archive'] = preset.archive
+    form['description'] = preset.description
+    form['image'] = preset.image
+    form['rating'] = preset.rating
+    # form['info'] = Vote.objects.get_or_create(preset=preset, user=request.user)[1]
+
+    if request.method == 'POST':
+        try:
+            vote = Vote.objects.get(preset=preset, user=request.user)
+            preset.sum_vote = int(preset.sum_vote) - int(vote.value)
+        except ObjectDoesNotExist:
+            vote = Vote.objects.create(preset=preset, user=request.user, value=request.POST['vote'])
+        total_vote = int(preset.sum_vote) + int(request.POST['vote'])
+
+
+        # total_vote = fabs(int(preset.sum_vote) - int(vote.value))
+
+
+        count_vote = len(Vote.objects.filter(preset=preset))    #count votes
+
+
+        preset.rating = total_vote / count_vote
+        preset.sum_vote = total_vote
+        preset.save()
+        vote.value = request.POST['vote']
+        vote.save()
+
+        return HttpResponseRedirect(f"/{pk}")
+    return render(request, 'detail.html', form)
+
+
 def upload_preset(request):
     FILE_IMAGE_NAME = "sys_wall.jpeg"
 
@@ -84,7 +121,7 @@ class ListPresetsView(ListView): ## Adaptive
         '''
         if not self.request.user.is_anonymous:
 
-            context['info'] = self.request.get_full_path()####
+            # context['info'] = self.request.get_full_path()####
             if self.request.get_full_path() == '/private':
                 presets = Preset.objects.filter(author=self.request.user)
                 visibility = 'PRV'
@@ -110,6 +147,16 @@ class DetailPresetView(DetailView):
     model = Preset
     template_name = "detail.html"
     context_object_name = "preset"
+
+
+
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # r = self.request.POST
+        # context['rating'] = r
+
+        return context
 
 
 class EditPresetView(UpdateView):

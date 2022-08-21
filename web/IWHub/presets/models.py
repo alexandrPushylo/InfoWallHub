@@ -20,10 +20,23 @@ class Preset(models.Model):
     uu_id = models.UUIDField(default=uuid.uuid4)
     archive = models.FileField(upload_to=user_directory_path)
     # archive = models.FileField(upload_to='static/presets')
+    rating = models.DecimalField(default=0, null=True, blank=True, decimal_places=1, max_digits=999)
+    sum_vote = models.IntegerField(default=0,null=True,blank=True)
 
     def __str__(self):
-        return f"{self.title}"
+        return f"{self.title} {self.author} {self.private}"
 
     class Meta:
         verbose_name = "Пресет"
         verbose_name_plural = "Пресеты"
+
+
+class Vote(models.Model):
+    value = models.SmallIntegerField(default=1)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    preset = models.ForeignKey(Preset, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.preset} {self.value} {self.user}"
+
+
