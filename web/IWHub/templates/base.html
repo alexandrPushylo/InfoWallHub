@@ -25,7 +25,7 @@
 {#      <button class="btn btn-outline-success" type="submit">Искать</button>#}
 {#    </form>#}
 
-       <a href="{% url 'library_presets' %}" class="btn btn-secondary">Библиотека пресетов </a>
+       <a href="{% url 'library' %}" class="btn btn-secondary">Библиотека пресетов </a>
        <a href="{% url 'create' %}" class="btn btn-secondary">Добавить пресет </a>
         {% if user.id != None %}
       <div class="dropdown">

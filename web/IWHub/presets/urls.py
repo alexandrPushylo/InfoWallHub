@@ -12,8 +12,8 @@ def test(request):
 
 urlpatterns = [
     path('', ListPresetsView.as_view(), name="list"),
-    path('library/', ListPublicPresetsView.as_view(), name="library_presets"),
-    path('private/', ListPrivatePresetsView.as_view(), name="private"),
+    path('library', ListPresetsView.as_view(), name="library"),
+    path('private', ListPresetsView.as_view(), name="private"),
 
     path('<int:pk>', DetailPresetView.as_view(), name="detail"),
     path('edit/<int:pk>', EditPresetView.as_view(), name="edit"),

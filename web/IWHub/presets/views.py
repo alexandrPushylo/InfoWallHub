@@ -67,6 +67,7 @@ class ListPrivatePresetsView(ListView): ## Show private presets
         context['presets'] = presets
         return context
 
+
 class ListPresetsView(ListView): ## Adaptive
     model = Preset
     template_name = "main.html"
@@ -74,11 +75,33 @@ class ListPresetsView(ListView): ## Adaptive
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        if self.request.user.is_anonymous:
-            presets = Preset.objects.filter(private=False)
+        visibility = 'ALL'# ALL,PUB, PRV, PRPB
+        '''visibility = 
+        ALL - all public + all private (debug)
+        PUB - only public (anonymous)
+        PRV - only private (current user)
+        PRPB - private + public (current user)
+        '''
+        if not self.request.user.is_anonymous:
+
+            context['info'] = self.request.get_full_path()####
+            if self.request.get_full_path() == '/private':
+                presets = Preset.objects.filter(author=self.request.user)
+                visibility = 'PRV'
+            elif self.request.get_full_path() == '/library':
+                presets = Preset.objects.filter(Q(author=self.request.user) | Q(private=False))
+                visibility = 'PRPB'
+            else:
+                presets = Preset.objects.filter(Q(author=self.request.user) | Q(private=False))
+                visibility = 'INIT'
         else:
-            presets = Preset.objects.filter(Q(author=self.request.user) | Q(private=False))
+            presets = Preset.objects.filter(private=False)
+            visibility = 'INIT'
+            if self.request.get_full_path() == '/library':
+                visibility = 'PUB'
+
         context['presets'] = presets
+        context['visibility'] = visibility
         return context
 
 
