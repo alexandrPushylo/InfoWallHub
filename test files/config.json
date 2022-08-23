@@ -1,0 +1,21 @@
+{
+    "preset": {
+        "name": "default_name"
+    },
+    "widgets": {
+        "date": {
+            "name": "date",
+            "module": "date.py"
+        },
+        "clock": {
+            "name": "clock",
+            "module": "clock.py"
+        }
+    },
+    "devace": {
+        "resolution": {
+            "width": 2560,
+            "height": 1600
+        }
+    }
+}
