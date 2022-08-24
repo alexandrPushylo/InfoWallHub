@@ -215,3 +215,16 @@ def signup_view(request):
         return HttpResponseRedirect('/')
     return render(request, 'signup.html', {})
 
+
+class SearchPresetsView(ListView):
+    model = Preset
+    template_name = "main.html"
+    context_object_name = "presets"
+
+    def get_queryset(self):
+        query = self.request.GET.get('q')
+        object_list = Preset.objects.filter(
+            Q(widget_set__icontains=query) |
+            Q(title__icontains=query)
+        )
+        return object_list
