@@ -11,6 +11,8 @@ from presets.models import Preset, Vote
 from presets.forms import UploadPresetForm, DetailPresetForm
 
 import tarfile
+import json
+
 from math import fabs
 
 # Create your views here.
@@ -21,6 +23,8 @@ def detail_preset_view(request,pk):
     form['description'] = preset.description
     form['image'] = preset.image
     form['rating'] = preset.rating
+    form['widget_set'] = preset.widget_set
+    form['author'] = preset.author
     # form['info'] = Vote.objects.get_or_create(preset=preset, user=request.user)[1]
 
     if request.method == 'POST':
@@ -30,9 +34,6 @@ def detail_preset_view(request,pk):
         except ObjectDoesNotExist:
             vote = Vote.objects.create(preset=preset, user=request.user, value=request.POST['vote'])
         total_vote = int(preset.sum_vote) + int(request.POST['vote'])
-
-
-        # total_vote = fabs(int(preset.sum_vote) - int(vote.value))
 
 
         count_vote = len(Vote.objects.filter(preset=preset))    #count votes
@@ -50,25 +51,35 @@ def detail_preset_view(request,pk):
 
 def upload_preset(request):
     FILE_IMAGE_NAME = "sys_wall.jpeg"
+    FILE_CONFIG_NAME = "config.json"
 
 
     if request.method == 'POST':
         archive = request.FILES.get('archive')
         title = request.POST['title']
         description = request.POST['description']
-        widget_set = request.POST['widget_set']
+        # widget_set = request.POST['widget_set']
         # private = True if request.POST['private'] == 'on' else False
         private = True if request.POST.get('private') else False
 
         author = request.user
 
         preset = Preset(archive=archive, title=title, description=description,
-                        widget_set=widget_set, private=private, author=author)
+                        private=private, author=author)
         preset.image = f"storage/presets/{preset.uu_id}/{FILE_IMAGE_NAME}"
         preset.save()
 
-        with tarfile.open(f"storage\presets\{preset.uu_id}\{archive}", 'r') as tar:
+        with tarfile.open(f"storage/presets/{preset.uu_id}/{archive}", 'r') as tar:
             tar.extract(FILE_IMAGE_NAME, f"storage\presets\{preset.uu_id}")
+            tar.extract(FILE_CONFIG_NAME, f"storage\presets\{preset.uu_id}")
+
+        PATH_CONFIG_FILE = f"storage\presets\{preset.uu_id}\{FILE_CONFIG_NAME}"
+        with open(PATH_CONFIG_FILE, 'r') as fp:
+            config = json.load(fp)
+        widget_set = config['widgets'].keys()
+        widget_set = ', '.join(widget_set)
+        preset.widget_set = widget_set
+        preset.save()
 
         return HttpResponseRedirect('/')
 
@@ -148,9 +159,6 @@ class DetailPresetView(DetailView):
     template_name = "detail.html"
     context_object_name = "preset"
 
-
-
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         # r = self.request.POST
@@ -162,14 +170,14 @@ class DetailPresetView(DetailView):
 class EditPresetView(UpdateView):
     model = Preset
     template_name = "edit.html"
-    fields = 'title', 'description'
+    fields = 'title', 'description', 'private'
     success_url = '/'
 
 
 class DeletePresetView(DeleteView):
     model = Preset
     template_name = "delete.html"
-    success_url = '/'
+    success_url = '/private'
 
 
 def logout_view(request):

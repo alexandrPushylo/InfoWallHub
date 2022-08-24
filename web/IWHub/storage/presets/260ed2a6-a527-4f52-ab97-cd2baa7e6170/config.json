@@ -1,0 +1,21 @@
+{
+    "preset": {
+        "name": "stonehenge"
+    },
+    "widgets": {
+        "date": {
+            "name": "date",
+            "module": "date.py"
+        },
+        "clock": {
+            "name": "clock",
+            "module": "clock.py"
+        }
+    },
+    "devace": {
+        "resolution": {
+            "width": 6473,
+            "height": 3641
+        }
+    }
+}

@@ -7,9 +7,11 @@
       <div class="card-body">
         <p class="card-text"> {{description}}</p>
         <p class="card-text"> {{archive}}</p>
+        <p class="card-text"> {{widget_set}}</p>
+        <p class="card-text"> {{author}}</p>
 
         <div style="padding-right: 0px">
-            <a href="{{ archive }}" class="btn btn-secondary">Скачать пресет </a>
+            <a href="{{ archive.url }}" class="btn btn-secondary">Скачать пресет </a>
             <form action="" method="post">{% csrf_token %}
               <div class="dropup-center dropup">
                   <button class="btn  dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">

@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 
 
 def user_directory_path(instance, filename):
-    return "storage/presets/{0}/{1}".format(str(instance.uu_id), filename)
+    return "presets/{0}/{1}".format(str(instance.uu_id), filename)
 
 
 class Preset(models.Model):
