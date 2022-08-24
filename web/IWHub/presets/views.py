@@ -8,12 +8,11 @@ from django.core.exceptions import ObjectDoesNotExist
 
 from django.contrib.auth.models import User
 from presets.models import Preset, Vote
-from presets.forms import UploadPresetForm, DetailPresetForm
+from presets.forms import UploadPresetForm  #, DetailPresetForm
 
 import tarfile
 import json
 
-from math import fabs
 
 # Create your views here.
 def detail_preset_view(request,pk):
@@ -25,7 +24,6 @@ def detail_preset_view(request,pk):
     form['rating'] = preset.rating
     form['widget_set'] = preset.widget_set
     form['author'] = preset.author
-    # form['info'] = Vote.objects.get_or_create(preset=preset, user=request.user)[1]
 
     if request.method == 'POST':
         try:
@@ -35,9 +33,7 @@ def detail_preset_view(request,pk):
             vote = Vote.objects.create(preset=preset, user=request.user, value=request.POST['vote'])
         total_vote = int(preset.sum_vote) + int(request.POST['vote'])
 
-
         count_vote = len(Vote.objects.filter(preset=preset))    #count votes
-
 
         preset.rating = total_vote / count_vote
         preset.sum_vote = total_vote
@@ -58,8 +54,6 @@ def upload_preset(request):
         archive = request.FILES.get('archive')
         title = request.POST['title']
         description = request.POST['description']
-        # widget_set = request.POST['widget_set']
-        # private = True if request.POST['private'] == 'on' else False
         private = True if request.POST.get('private') else False
 
         author = request.user
@@ -86,36 +80,6 @@ def upload_preset(request):
     return render(request, 'create.html', {"form": UploadPresetForm})
 
 
-class ListAllPresetsView(ListView): ###TEST
-    model = Preset
-    template_name = "main.html"
-    context_object_name = "presets"
-
-
-class ListPublicPresetsView(ListView):  ## Show public presets
-    model = Preset
-    template_name = "public.html"
-    context_object_name = "presets"
-
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data(**kwargs)
-        presets = Preset.objects.filter(private=False)
-        context['presets'] = presets
-        return context
-
-
-class ListPrivatePresetsView(ListView): ## Show private presets
-    model = Preset
-    template_name = "main.html"
-    context_object_name = "presets"
-
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data(**kwargs)
-        presets = Preset.objects.filter(author=self.request.user)
-        context['presets'] = presets
-        return context
-
-
 class ListPresetsView(ListView): ## Adaptive
     model = Preset
     template_name = "main.html"
@@ -123,33 +87,24 @@ class ListPresetsView(ListView): ## Adaptive
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        visibility = 'ALL'# ALL,PUB, PRV, PRPB
-        '''visibility = 
-        ALL - all public + all private (debug)
-        PUB - only public (anonymous)
-        PRV - only private (current user)
-        PRPB - private + public (current user)
-        '''
-        if not self.request.user.is_anonymous:
 
-            # context['info'] = self.request.get_full_path()####
+        if not self.request.user.is_anonymous:
+            start_page = False
+            presets = Preset.objects.filter(private=False)
             if self.request.get_full_path() == '/private':
                 presets = Preset.objects.filter(author=self.request.user)
-                visibility = 'PRV'
+
             elif self.request.get_full_path() == '/library':
                 presets = Preset.objects.filter(Q(author=self.request.user) | Q(private=False))
-                visibility = 'PRPB'
+
             else:
-                presets = Preset.objects.filter(Q(author=self.request.user) | Q(private=False))
-                visibility = 'INIT'
+                start_page = True
         else:
             presets = Preset.objects.filter(private=False)
-            visibility = 'INIT'
-            if self.request.get_full_path() == '/library':
-                visibility = 'PUB'
+            start_page = True
 
         context['presets'] = presets
-        context['visibility'] = visibility
+        context['start_page'] = start_page
         return context
 
 
@@ -161,8 +116,7 @@ class DetailPresetView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # r = self.request.POST
-        # context['rating'] = r
+
 
         return context
 

@@ -2,30 +2,11 @@
 
 {% block content %}
 
-{#    {% for i in info %}#}
-{#        <p> {{i}}</p>#}
-{#    {%endfor%}#}
-
-
-    {{ info }}
-    {{ visibility }}
-{#    {% if user.id == None %}#}
-{#        {% include 'public.html' %}#}
-{#    {% else %}#}
-{#        {% include 'private.html' %}#}
-{#    {% endif %}#}
-
-    {% if visibility == 'PRV' %}
-{#        ALL,PUB, PRV, PRPB#}
-        {% include 'private.html' %}
-    {% elif visibility == 'PUB' %}
-        {% include 'public.html' %}
-    {% elif visibility == 'PRPB' %}
-        {% include 'public.html' %}
-    {% elif visibility == 'INIT' %}
-        {% include 'initial.html' %}
+    {% if start_page %}
+        {% include 'start_page.html' %}
     {% else %}
-        {% include 'private.html' %}
+        {% include 'components\card.html' %}
     {% endif %}
+
 {% endblock %}
 

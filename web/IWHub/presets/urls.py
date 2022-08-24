@@ -2,7 +2,7 @@ from django.urls import path
 from django.http import HttpResponse
 
 from presets.views import upload_preset, DetailPresetView, DeletePresetView, EditPresetView
-from presets.views import ListAllPresetsView, ListPrivatePresetsView, ListPublicPresetsView,ListPresetsView
+from presets.views import ListPresetsView
 from presets.views import detail_preset_view, SearchPresetsView
 
 def test(request):
