@@ -22,8 +22,10 @@
         {% include 'public.html' %}
     {% elif visibility == 'PRPB' %}
         {% include 'public.html' %}
-    {% else %}
+    {% elif visibility == 'INIT' %}
         {% include 'initial.html' %}
+    {% else %}
+        {% include 'private.html' %}
     {% endif %}
 {% endblock %}
 
