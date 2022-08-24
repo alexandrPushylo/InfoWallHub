@@ -12,6 +12,7 @@ from presets.forms import UploadPresetForm  #, DetailPresetForm
 
 import tarfile
 import json
+from random import randint
 
 
 # Create your views here.
@@ -182,22 +183,16 @@ class SearchPresetsView(ListView):
         return object_list
 
 
-def carousel_view(request):
-    form = {}
-
-    preset = Preset.objects.order_by('rating')
-
-    return render(request, "start_page.html", form)
-
-
 class CarouselView(ListView):
     model = Preset
     template_name = 'main.html'
     context_object_name = 'presets'
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        reiting_list = Preset.objects.order_by('rating').reverse()[:3]
-        context['presets'] = reiting_list
+        reiting_list = Preset.objects.order_by('rating').reverse()
+        len_list = len(reiting_list)//3
+        n = randint(0, len_list)
+        context['presets'] = reiting_list[n]
         context['start_page'] = True
 
         return context
