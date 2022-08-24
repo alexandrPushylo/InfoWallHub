@@ -109,16 +109,14 @@ class ListPresetsView(ListView): ## Adaptive
 
 
 
-class DetailPresetView(DetailView):
-    model = Preset
-    template_name = "detail.html"
-    context_object_name = "preset"
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-
-
-        return context
+# class DetailPresetView(DetailView):
+#     model = Preset
+#     template_name = "detail.html"
+#     context_object_name = "preset"
+#
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         return context
 
 
 class EditPresetView(UpdateView):
@@ -182,3 +180,24 @@ class SearchPresetsView(ListView):
             Q(title__icontains=query)
         )
         return object_list
+
+
+def carousel_view(request):
+    form = {}
+
+    preset = Preset.objects.order_by('rating')
+
+    return render(request, "start_page.html", form)
+
+
+class CarouselView(ListView):
+    model = Preset
+    template_name = 'main.html'
+    context_object_name = 'presets'
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        reiting_list = Preset.objects.order_by('rating').reverse()[:3]
+        context['presets'] = reiting_list
+        context['start_page'] = True
+
+        return context
