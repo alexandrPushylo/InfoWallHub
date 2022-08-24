@@ -20,29 +20,12 @@
   <div class="container-fluid">
     <a class="navbar-brand" href="/"><i class="fa-solid fa-kitchen-set"></i>Главная </a>
 
-{#    <form class="d-flex" action="{% url 'search_results' %}" role="search" method="get">#}
-{#      <input class="form-control me-2" type="search" placeholder="Поиск..." aria-label="Search" name="q">#}
-{#      <button class="btn btn-outline-success" type="submit">Искать</button>#}
-{#    </form>#}
-
-       <a href="{% url 'library' %}" class="btn btn-secondary">Библиотека пресетов </a>
-       <a href="{% url 'create' %}" class="btn btn-secondary">Добавить пресет </a>
         {% if user.id != None %}
-      <div class="dropdown">
-            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-             {{ user }}
-            </button>
-            <ul class="dropdown-menu dropdown-menu-end" >
+            <a href="{% url 'library' %}" class="btn btn-secondary">Библиотека пресетов </a>
+            {% include "components\search.html" %}
+            <a href="{% url 'create' %}" class="btn btn-secondary">Добавить пресет </a>
+            {% include "components\user_menu.html" %}
 
-             <li><a class="dropdown-item" href="{% url 'create' %}">Добавить пресет</a></li>
-                <hr>
-             <li><a class="dropdown-item" href="{% url 'private' %}">Мои пресеты</a></li>
-             <li><a class="dropdown-item" href="#">Something else here</a></li>
-                <hr>
-             <li><a class="dropdown-item" href="{% url 'logout' %}">Выйти</a></li>
-
-            </ul>
-        </div>
 
         {% else %}
             <div class="btn-group">
