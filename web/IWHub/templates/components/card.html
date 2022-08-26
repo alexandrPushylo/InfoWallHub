@@ -6,17 +6,20 @@
         <div class="card" style="width: 18rem; margin-bottom:15px;">
           <img src="{{i.image}}" class="card-img-top" alt="{{i.id}}">
           <div class="card-body">
-            <h5 class="card-title">{{i.title}}</h5>
-            <p class="card-text">{{i.description}}</p>
-            <p class="card-text">{{i.rating}}</p>
-            <a href="{% url 'detail' i.id %}" class="btn btn-secondary">Перейти </a>
-
-              {% if user == i.author %}
+            <h4 class="card-title" style="text-align: center">{{i.title}}</h4>
+            <h6 class="card-text"><label>Автор:</label> <b>{{i.author}}</b></h6>
+            <h6 class="card-text"><label>Виджеты:</label> <b>{{i.widget_set}}</b></h6>
+            <p class="card-text" style="text-align: right; color: green" > <b>{{i.rating}}</b></p>
             <hr>
-            <a href="{% url 'edit' i.id %}" class="btn btn-secondary">Редактировать </a>
-            <a href="{% url 'delete' i.id %}" class="btn btn-secondary">Удалить </a>
-              {% endif %}
+            <div class="btn-group ">
+                <a href="{% url 'detail' i.id %}" class="btn btn-outline-secondary active" aria-current="page"><i class="fa-solid fa-circle-info"></i></a>
+                {% if user == i.author %}
+                <a href="{% url 'edit' i.id %}" class="btn btn-outline-secondary"><i class="fa-solid fa-pen-to-square"></i></a>
+                <a href="{% url 'delete' i.id %}" class="btn btn-outline-secondary"><i class="fa-solid fa-trash-can"></i></a>
 
+                {% endif %}
+
+            </div>
           </div>
         </div>
         </div>

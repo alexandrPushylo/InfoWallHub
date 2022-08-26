@@ -16,14 +16,14 @@
 <body style="font-family: 'Montserrat', sans-serif;">
 
 
-<nav class="navbar" style="background-color: #e3f2fd; position:sticky; top:0;z-index:100;">
+<nav class="navbar" style="background-color: #ffffff; position:sticky; top:0;z-index:100;">
   <div class="container-fluid">
     <a class="navbar-brand" href="/"><i class="fa-solid fa-kitchen-set"></i>Главная </a>
 
         {% if user.id != None %}
-            <a href="{% url 'library' %}" class="btn btn-secondary">Библиотека пресетов </a>
+            <a href="{% url 'library' %}" class="btn btn-outline-secondary btn-sm">Библиотека пресетов </a>
             {% include "components\search.html" %}
-            <a href="{% url 'create' %}" class="btn btn-secondary">Добавить пресет </a>
+{#            <a href="{% url 'create' %}" class="btn btn-outline-secondary">Добавить пресет </a>#}
             {% include "components\user_menu.html" %}
 
 
