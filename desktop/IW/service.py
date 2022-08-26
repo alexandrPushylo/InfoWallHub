@@ -8,6 +8,10 @@ class AppServerSvc(win32serviceutil.ServiceFramework):
     _svc_name = "TestService" 
     _svc_display_name_ = "Test Service"
     
+    @classmethod
+    def parse_command_line(cls):
+        win32serviceutil.HandleCommandLine(cls)
+    
     def __init__(self, args):
         win32serviceutil.ServiceFramework.__init__(self, args)
         self.hWaitStop = win32event.CreateEvent(None, 0, 0, None)
@@ -27,4 +31,4 @@ class AppServerSvc(win32serviceutil.ServiceFramework):
         pass
     
     if __name__ == '__main__':
-        win32serviceutil.HandleCommandLine(AppServerSvc)
+        AppServerSvc.parse_command_line()
