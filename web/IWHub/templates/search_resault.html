@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div>
+        <h4 style="margin-left: 50px; margin-top: 50px">Результаты поиска "{{ search }}"</h4>
+    </div>
+    <div style="margin-left: 50px">
+        <form action="" method="get">
+            <div class="btn-group" role="group" aria-label="Basic outlined example">
+               <button type="submit" class="btn btn-outline-primary" value="sort_title" name="sort">По названию</button>
+               <button type="submit" class="btn btn-outline-primary" value="sort_rating" name="sort">По рейтингу</button>
+               <button type="submit" class="btn btn-outline-primary" value="sort_author" name="sort">По автору</button>
+                <input type="hidden" value={{ search }} name="q">
+             </div>
+        </form>
+    </div>
+
+
+        {% include 'components\card.html' %}
+
+
+{% endblock %}

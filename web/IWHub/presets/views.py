@@ -171,16 +171,30 @@ def signup_view(request):
 
 class SearchPresetsView(ListView):
     model = Preset
-    template_name = "main.html"
+    template_name = "search_resault.html"
     context_object_name = "presets"
 
     def get_queryset(self):
-        query = self.request.GET.get('q')
+        query = self.request.GET.get('q', "")
         object_list = Preset.objects.filter(
             Q(widget_set__icontains=query) |
             Q(title__icontains=query)
         )
         return object_list
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['search'] = self.request.GET.get('q', "")
+        sort = self.request.GET.get('sort')
+        if sort == 'sort_author':
+            sort_list = Preset.objects.order_by('author')
+        elif sort == 'sort_rating':
+            sort_list = Preset.objects.order_by('rating').reverse()
+        else:
+            sort_list = Preset.objects.order_by('title')
+
+        context['presets'] = sort_list
+        return context
 
 
 class CarouselView(ListView):

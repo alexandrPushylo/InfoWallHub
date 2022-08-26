@@ -6,6 +6,7 @@ from presets.views import ListPresetsView
 from presets.views import detail_preset_view, SearchPresetsView
 from presets.views import CarouselView
 
+
 def test(request):
     msg = "Test"
     return HttpResponse(f"{msg}\n\n{request}")
@@ -20,6 +21,7 @@ urlpatterns = [
     # path('<int:pk>', DetailPresetView.as_view(), name="detail"),
     path('<int:pk>', detail_preset_view, name="detail"),
     path('edit/<int:pk>', EditPresetView.as_view(), name="edit"),
+
 
     path('delete/<int:pk>', DeletePresetView.as_view(), name="delete"),
     path('search', SearchPresetsView.as_view(), name='search'),
