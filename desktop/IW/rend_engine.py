@@ -35,7 +35,7 @@ class REngine():
                
     def put_wall_from_buffer(self):# put wall
         try:
-            ctypes.windll.user32.SystemParametersInfoW(0x0014 , 0, self.canvas_path, 2)
+            ctypes.windll.user32.SystemParametersInfoW(0x0014 , 0, self.canvas_path, 0)#return True if ok
         except:
             pass
         
