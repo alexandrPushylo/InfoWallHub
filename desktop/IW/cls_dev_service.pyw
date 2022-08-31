@@ -46,7 +46,7 @@ def main():
                 f"{str(datetime.now())[:-7]}\n"
                 )
            
-        rend.draw()
+        rend.render()
         
         
         iwservice.waiting()
