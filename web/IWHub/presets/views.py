@@ -48,7 +48,7 @@ def detail_preset_view(request,pk):
 
 def upload_preset(request):
     FILE_IMAGE_NAME = "sys_wall.jpeg"
-    FILE_CONFIG_NAME = "config.json"
+    FILE_CONFIG_NAME = "preset.json"
 
 
     if request.method == 'POST':
@@ -71,8 +71,7 @@ def upload_preset(request):
         PATH_CONFIG_FILE = f"storage\presets\{preset.uu_id}\{FILE_CONFIG_NAME}"
         with open(PATH_CONFIG_FILE, 'r') as fp:
             config = json.load(fp)
-        widget_set = config['widgets'].keys()
-        widget_set = ', '.join(widget_set)
+        widget_set = config['widgets']
         preset.widget_set = widget_set
         preset.save()
 
@@ -176,22 +175,22 @@ class SearchPresetsView(ListView):
 
     def get_queryset(self):
         query = self.request.GET.get('q', "")
-        object_list = Preset.objects.filter(
-            Q(widget_set__icontains=query) |
-            Q(title__icontains=query)
-        )
+        criterion1 = Q(widget_set__icontains=query)
+        criterion2 = Q(title__icontains=query)
+        criterion3 = Q(author=self.request.user) | Q(private=False)
+        object_list = Preset.objects.filter(criterion3 & (criterion1 | criterion2))
         return object_list
 
-    def get_context_data(self, *, object_list=None, **kwargs):
+    def get_context_data(self, *, object_list=True, **kwargs):
         context = super().get_context_data(**kwargs)
         context['search'] = self.request.GET.get('q', "")
         sort = self.request.GET.get('sort')
         if sort == 'sort_author':
-            sort_list = Preset.objects.order_by('author')
+            sort_list = self.object_list.order_by('author')
         elif sort == 'sort_rating':
-            sort_list = Preset.objects.order_by('rating').reverse()
+            sort_list = self.object_list.order_by('rating').reverse()
         else:
-            sort_list = Preset.objects.order_by('title')
+            sort_list = self.object_list.order_by('title')
 
         context['presets'] = sort_list
         return context
