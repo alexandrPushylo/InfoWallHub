@@ -12,7 +12,7 @@ class SimpleDate(PresetConstr.Preset):
         today = datetime.now()  
         self.context = today.strftime("%d.%m.%Y")
         return super().set_context()
-        
+
    
 if __name__ == "__main__":
     SimpleDate.show_preset()    
