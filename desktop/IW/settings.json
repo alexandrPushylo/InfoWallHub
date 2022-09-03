@@ -3,7 +3,7 @@
     "buffer": "buffer", 
     "settings": "settings.json", 
     "service": "cls_dev_service.pyw", 
-    "param5": false, 
+    "frequency": 1, 
     "param6": false, 
     "param7": false, 
     "param8": false, 

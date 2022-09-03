@@ -1,5 +1,6 @@
 import argparse
 import json
+import tarfile
 from os import sep, path, system
 import sys
 import subprocess
@@ -37,6 +38,17 @@ class Launcher():
                 json.dump(self.settings, fp)
         except Exception as e:
             print(e)
+    
+    def create_arch(self):
+        param = {}
+        with open('preset.json','r')as fp:
+            param = json.load(fp)
+        print(param['module'])
+        with tarfile.open(param['module']+'.tar','w') as tar:
+            tar.add(param['module']+'.py')
+            tar.add('preset.json')
+            tar.add('sys_wall.jpeg')
+        
         
         
 def parse_cml():
@@ -54,7 +66,13 @@ def main():
     
     if comm == 'start': launch.start()
     elif comm == 'stop': launch.stop()
+    elif comm == 'arch': launch.create_arch()
     elif comm == '': pass
+    elif comm == '': pass
+    elif comm == '': pass
+    elif comm == '': pass
+    elif comm == '': pass
+    
     else:
         print(comm)
    
