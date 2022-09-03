@@ -4,7 +4,7 @@ from os import sep, path
 from datetime import datetime
 from time import sleep
 
-from rend_engine import REngine
+from R_engine import REngine 
 
 BUFFER = f"D:{sep}Temp{sep}t{sep}buffer.txt"
 
@@ -38,17 +38,14 @@ class IWService():
 def main():
     iwservice = IWService(buffer=BUFFER)
     rend = REngine()
-    
-        
+            
     while iwservice.get_status():
         with open(f"D:{sep}Temp{sep}t{sep}log.txt" , 'a+') as fp:
             fp.write(
                 f"{str(datetime.now())[:-7]}\n"
-                )
-           
+                )  
+                
         rend.render()
-        
-        
         iwservice.waiting()
     rend.restore_wall()
     
