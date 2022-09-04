@@ -15,15 +15,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include, re_path
-from django.http import HttpResponse
-from presets.views import logout_view, signin_view, signup_view
+from presets.views import logout_view, signin_view, signup_view, page_404_view
 from django.conf import settings
 from django.conf.urls.static import static
 
-
-def test(request):
-    msg = "Test"
-    return HttpResponse(f"{msg}\n\n{request}")
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -31,6 +26,5 @@ urlpatterns = [
     path('signin/', signin_view, name="sign_in"),
     path('signup/', signup_view, name="sign_up"),
     path('logout', logout_view, name="logout"),
-
-    # re_path(r'.*', test)
+    re_path(r'.*', page_404_view)
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
