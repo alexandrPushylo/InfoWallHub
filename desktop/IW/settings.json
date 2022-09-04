@@ -4,13 +4,9 @@
     "settings": "settings.json", 
     "service": "cls_dev_service.pyw", 
     "frequency": 1, 
-    "param6": false, 
-    "param7": false, 
-    "param8": false, 
-    "param9": false, 
-    "param10": false, 
-    "param11": false, 
-    "param12": false, 
-    "param13": false, 
-    "param14": false
+    "workdir": "workdir", 
+    "presets_dir": "presets", 
+    "preset_config_file": "preset.json", 
+    "param9": false
+    
 }
