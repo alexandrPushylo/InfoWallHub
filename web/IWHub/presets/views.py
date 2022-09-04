@@ -1,3 +1,4 @@
+import os
 from django.shortcuts import render
 from django.views.generic import ListView, UpdateView, DeleteView
 from django.http import HttpResponseRedirect, Http404
@@ -9,6 +10,7 @@ from django.contrib.auth.models import User
 from presets.models import Preset, Vote
 from presets.forms import UploadPresetForm
 
+import shutil
 import tarfile
 import json
 from random import randint
