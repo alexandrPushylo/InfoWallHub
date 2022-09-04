@@ -16,7 +16,7 @@ from random import randint
 
 
 # Create your views here.
-def detail_preset_view(request,pk):
+def detail_preset_view(request, uu_id):
     form = {}
     preset = Preset.objects.get(pk=pk)
     form['title'] = preset.title
@@ -42,8 +42,7 @@ def detail_preset_view(request,pk):
         preset.save()
         vote.value = request.POST['vote']
         vote.save()
-
-        return HttpResponseRedirect(f"/{pk}")
+        return HttpResponseRedirect(f"/{uu_id}")
     return render(request, 'detail.html', form)
 
 
@@ -116,6 +115,9 @@ class EditPresetView(UpdateView):
     template_name = "edit.html"
     fields = 'title', 'description', 'private'
     success_url = '/'
+    def get_object(self, queryset=None):
+        uu_id = self.request.get_full_path().lstrip('/edit/')
+        return Preset.objects.get(uu_id=uu_id)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -128,6 +130,10 @@ class DeletePresetView(DeleteView):
     model = Preset
     template_name = "delete.html"
     success_url = '/private'
+
+    def get_object(self, queryset=None):
+        uu_id = self.request.get_full_path().lstrip('/delete/')
+        return Preset.objects.get(uu_id=uu_id)
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
