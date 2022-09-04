@@ -2,15 +2,15 @@
 
 {% block content %}
 
-<div class="container m-2 mx-auto" >
-    <div class="card" >
+<div class="container m-4 mx-auto">
+    <div class="card shadow-lg" style="max-width: 80%; background-color: rgba(247,247,248,0.71)">
       <img src="/{{ preset.image}}" class="card-img-top" alt="...">
       <div class="card-body">
         <form action="" method="post">{% csrf_token %}
             <p class="card-text"><label>Название:</label>  {{form.title}}</p>
             <p class="card-text"><label>Описание: </label> {{form.description}}</p>
             <p class="card-text"><label>Приватный: </label> {{form.private}}</p>
-            <p><input class="btn btn-secondary" type="submit" value="Save"></p>
+            <p class="position-absolute bottom-0 end-0"><input class="btn btn-secondary me-5" type="submit" value="Save"></p>
         </form>
       </div>
     </div>

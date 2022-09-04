@@ -3,7 +3,7 @@
 {% block content %}
 
 <div class="container-sm mx-auto mt-5" style="width: 30rem">
-    <div class="card" >
+    <div class="card shadow-lg" style="background-color: rgba(247,247,248,0.71)">
       <img src="/{{ preset.image}}" class="card-img-top" alt="...">
       <div class="card-body">
         <form method="post">{% csrf_token %}
@@ -12,7 +12,7 @@
         </form>
       </div>
     </div>
-    <div class="alert alert-secondary mt-5" role="alert">
+    <div class="alert  mt-5 shadow-lg" role="alert" style="background-color: rgba(247,247,248,0.71)">
         Вы уверены что хотите удалить?
         <input class="btn btn-danger p-1 ms-5"  type="submit" value="Delete">
     </div>
