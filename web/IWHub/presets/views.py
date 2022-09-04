@@ -129,6 +129,17 @@ class DeletePresetView(DeleteView):
     template_name = "delete.html"
     success_url = '/private'
 
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form = self.get_form()
+        if form.is_valid():
+            from IWHub.settings import MEDIA_ROOT
+            shutil.rmtree(f"{MEDIA_ROOT}{os.sep}presets{os.sep}{self.object.uu_id}",
+                          ignore_errors=True)
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
+
 
 def logout_view(request):
     logout(request)

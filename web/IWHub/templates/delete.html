@@ -3,19 +3,19 @@
 {% block content %}
 
 <div class="container-sm mx-auto mt-5" style="width: 30rem">
+    <form method="post">{% csrf_token %}
     <div class="card shadow-lg" style="background-color: rgba(247,247,248,0.71)">
       <img src="/{{ preset.image}}" class="card-img-top" alt="...">
       <div class="card-body">
-        <form method="post">{% csrf_token %}
             <h3><p class="card-text" style="text-align: center">  {{preset.title}}</p></h3>
             <p class="card-text">{{preset.description}}</p>
-        </form>
       </div>
     </div>
     <div class="alert  mt-5 shadow-lg" role="alert" style="background-color: rgba(247,247,248,0.71)">
         Вы уверены что хотите удалить?
         <input class="btn btn-danger p-1 ms-5"  type="submit" value="Delete">
     </div>
+    </form>
 </div>
 
 {% endblock %}
