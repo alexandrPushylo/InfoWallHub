@@ -109,21 +109,18 @@ class ListPresetsView(ListView): ## Adaptive
 
 
 
-# class DetailPresetView(DetailView):
-#     model = Preset
-#     template_name = "detail.html"
-#     context_object_name = "preset"
-#
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         return context
-
 
 class EditPresetView(UpdateView):
     model = Preset
     template_name = "edit.html"
     fields = 'title', 'description', 'private'
     success_url = '/'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        preset = self.get_object()
+        context['preset'] = preset
+        return context
 
 
 class DeletePresetView(DeleteView):
