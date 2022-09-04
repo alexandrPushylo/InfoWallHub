@@ -48,6 +48,22 @@ class Launcher():
             tar.add(param['module']+'.py')
             tar.add('preset.json')
             tar.add('sys_wall.jpeg')
+    def install_preset(self, preset_arch_name:str):
+        if path.isfile(f"{self.settings['presets_dir']}{sep}{preset_arch_name}"):
+            preset_module_name = preset_arch_name.replace('tar','py') 
+            with tarfile.open(f"{self.settings['presets_dir']}{sep}{preset_arch_name}", 'r') as tar:
+                tar.extract(preset_module_name, self.settings['workdir'])
+                tar.extract(self.settings['preset_config_file'], self.settings['workdir'])
+            print(f"Модуль {preset_arch_name} разпакован!")
+        else:
+            print(f"Данный файл {preset_arch_name} не нейден!")
+                
+
+    def creat_works_space(self):
+        if not path.isdir(self.settings['presets_dir']):
+            mkdir(self.settings['presets_dir'])
+        if not path.isdir(self.settings['workdir']):
+            mkdir(self.settings['workdir'])
         
         
         
@@ -67,7 +83,7 @@ def main():
     if comm == 'start': launch.start()
     elif comm == 'stop': launch.stop()
     elif comm == 'arch': launch.create_arch()
-    elif comm == '': pass
+    elif args.install != '': launch.install_preset(args.install)
     elif comm == '': pass
     elif comm == '': pass
     elif comm == '': pass
