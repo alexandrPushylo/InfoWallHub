@@ -146,17 +146,17 @@ def logout_view(request):
 
 
 def signin_view(request):
+    out = {'err': False}
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return HttpResponseRedirect('/')    ###Redirect to a success page.
+            return HttpResponseRedirect('/private')
         else:
-            return HttpResponse('invalid login')
-
-    return render(request, 'signin.html', {})
+            out['err'] = True
+    return render(request, 'signin.html', out)
 
 
 def signup_view(request):
