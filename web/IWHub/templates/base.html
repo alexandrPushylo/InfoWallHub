@@ -14,28 +14,10 @@
 </head>
 {% load static %}
 <body style="font-family: 'Montserrat', sans-serif;">
+{#<body style="font-family: 'Montserrat', sans-serif; background-image: url('/static/coal-texture_(8).jpg')">#}
 
+{% include 'components\top_panel.html' %}
 
-<nav class="navbar" style="background-color: #ffffff; position:sticky; top:0;z-index:100;">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="/"><i class="fa-solid fa-kitchen-set"></i>Главная </a>
-
-        {% if user.id != None %}
-            <a href="{% url 'library' %}" class="btn btn-outline-secondary btn-sm">Библиотека пресетов </a>
-            {% include "components\search.html" %}
-{#            <a href="{% url 'create' %}" class="btn btn-outline-secondary">Добавить пресет </a>#}
-            {% include "components\user_menu.html" %}
-
-
-        {% else %}
-            <div class="btn-group">
-                <a href="{% url 'sign_in' %}" class="btn btn-primary active" aria-current="page">Вход</a>
-                <a href="{% url 'sign_up' %}" class="btn btn-primary">Регистрация</a>
-
-            </div>
-        {% endif %}
-  </div>
-</nav>
 
 {% block content %}
 {% endblock %}

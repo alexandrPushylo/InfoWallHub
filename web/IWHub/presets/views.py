@@ -19,6 +19,7 @@ from random import randint
 def detail_preset_view(request,pk):
     form = {}
     preset = Preset.objects.get(pk=pk)
+    form['title'] = preset.title
     form['archive'] = preset.archive
     form['description'] = preset.description
     form['image'] = preset.image
