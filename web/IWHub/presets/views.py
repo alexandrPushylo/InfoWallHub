@@ -1,14 +1,13 @@
 from django.shortcuts import render
-from django.views.generic import ListView, DetailView, UpdateView, DeleteView, CreateView
-from django.http import HttpResponseRedirect, HttpResponse
+from django.views.generic import ListView, UpdateView, DeleteView
+from django.http import HttpResponseRedirect, Http404
 from django.contrib.auth import logout, authenticate, login
 from django.db.models import Q
-
 from django.core.exceptions import ObjectDoesNotExist
 
 from django.contrib.auth.models import User
 from presets.models import Preset, Vote
-from presets.forms import UploadPresetForm  #, DetailPresetForm
+from presets.forms import UploadPresetForm
 
 import tarfile
 import json
@@ -34,9 +33,7 @@ def detail_preset_view(request, uu_id):
         except ObjectDoesNotExist:
             vote = Vote.objects.create(preset=preset, user=request.user, value=request.POST['vote'])
         total_vote = int(preset.sum_vote) + int(request.POST['vote'])
-
-        count_vote = len(Vote.objects.filter(preset=preset))    #count votes
-
+        count_vote = len(Vote.objects.filter(preset=preset))
         preset.rating = total_vote / count_vote
         preset.sum_vote = total_vote
         preset.save()
@@ -50,15 +47,12 @@ def upload_preset(request):
     FILE_IMAGE_NAME = "sys_wall.jpeg"
     FILE_CONFIG_NAME = "preset.json"
 
-
     if request.method == 'POST':
         archive = request.FILES.get('archive')
         title = request.POST['title']
         description = request.POST['description']
         private = True if request.POST.get('private') else False
-
         author = request.user
-
         preset = Preset(archive=archive, title=title, description=description,
                         private=private, author=author)
         preset.image = f"storage/presets/{preset.uu_id}/{FILE_IMAGE_NAME}"
@@ -71,16 +65,16 @@ def upload_preset(request):
         PATH_CONFIG_FILE = f"storage\presets\{preset.uu_id}\{FILE_CONFIG_NAME}"
         with open(PATH_CONFIG_FILE, 'r') as fp:
             config = json.load(fp)
+
         widget_set = config['widgets']
         preset.widget_set = widget_set
         preset.save()
 
-        return HttpResponseRedirect('/')
-
+        return HttpResponseRedirect('/private')
     return render(request, 'create.html', {"form": UploadPresetForm})
 
 
-class ListPresetsView(ListView): ## Adaptive
+class ListPresetsView(ListView):
     model = Preset
     template_name = "main.html"
     context_object_name = "presets"
@@ -93,10 +87,8 @@ class ListPresetsView(ListView): ## Adaptive
             presets = Preset.objects.filter(private=False)
             if self.request.get_full_path() == '/private':
                 presets = Preset.objects.filter(author=self.request.user)
-
             elif self.request.get_full_path() == '/library':
                 presets = Preset.objects.filter(Q(author=self.request.user) | Q(private=False))
-
             else:
                 start_page = True
         else:
@@ -108,13 +100,12 @@ class ListPresetsView(ListView): ## Adaptive
         return context
 
 
-
-
 class EditPresetView(UpdateView):
     model = Preset
     template_name = "edit.html"
     fields = 'title', 'description', 'private'
-    success_url = '/'
+    success_url = '/private'
+
     def get_object(self, queryset=None):
         uu_id = self.request.get_full_path().lstrip('/edit/')
         return Preset.objects.get(uu_id=uu_id)
@@ -215,6 +206,7 @@ class CarouselView(ListView):
     model = Preset
     template_name = 'main.html'
     context_object_name = 'presets'
+
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         reiting_list = Preset.objects.order_by('rating').reverse()
@@ -222,5 +214,6 @@ class CarouselView(ListView):
         n = randint(0, len_list)
         context['presets'] = reiting_list[n]
         context['start_page'] = True
-
         return context
+
+
