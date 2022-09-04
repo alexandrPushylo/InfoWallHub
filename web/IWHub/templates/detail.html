@@ -1,37 +1,36 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="container m-2">
-    <div class="card" style="width: 45rem;">
+
+<div class="container m-5 mx-auto" >
+    <div class="card shadow-lg" style="background-color: rgba(247,247,248,0.71)">
       <img src="{{image}}" class="card-img-top" alt="...">
       <div class="card-body">
-        <p class="card-text"> {{description}}</p>
-        <p class="card-text"> {{archive}}</p>
-        <p class="card-text"> {{widget_set}}</p>
-        <p class="card-text"> {{author}}</p>
-
-        <div style="padding-right: 0px">
+        <h4 class="card-title" style="text-align: center">{{title}}</h4>
+        <p class="card-text"><label>Виджеты: </label> {{widget_set}}</p>
+        <p class="card-text"><label>Автор: </label> {{author}}</p>
+        <p class="card-text"><label>Описание: </label> {{description}}</p>
+        <div class="card-text">
             <a href="{{ archive.url }}" class="btn btn-secondary">Скачать пресет </a>
+        </div>
+        <div class="position-absolute bottom-0 end-0">
             <form action="" method="post">{% csrf_token %}
-              <div class="dropup-center dropup">
+              <div class="dropup-center dropup"><label>Рейтинг: </label>
                   <button class="btn  dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                      {{ rating }}
                     </button>
-                    <ul class="dropdown-menu" style="width: 20rem">
+                    <ul class="dropdown-menu " style="min-width: 10px">
                      <li><input class="dropdown-item" type="submit" value="1" name="vote"></li>
                      <li><input class="dropdown-item" type="submit" value="2" name="vote"></li>
                      <li><input class="dropdown-item" type="submit" value="3" name="vote"></li>
                      <li><input class="dropdown-item" type="submit" value="4" name="vote"></li>
                      <li><input class="dropdown-item" type="submit" value="5" name="vote"></li>
-
                      </ul>
               </div>
             </form>
-
         </div>
-
       </div>
     </div>
 </div>
-{{ info }}
+
 {% endblock %}

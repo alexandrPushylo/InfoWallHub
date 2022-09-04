@@ -1,32 +1,32 @@
 {% extends 'base.html' %}
 
 {% block content %}
+
 <section class="container mt-5" style="width: 300px">
-<form  method="post">{% csrf_token %}
-  <div >
-    <label>Имя пользователя</label>
-    <input type="text" class="form-control" name="username">
-
-  </div>
-  <div >
-    <label>Пороль</label>
-    <input type="password" class="form-control" name="password">
-  </div>
-  <div >
-    <label>Email</label>
-    <input type="email" class="form-control" name="email">
-  </div>
-  <div >
-    <label>Имя</label>
-    <input type="text" class="form-control" name="first_name">
-  </div>
-  <div >
-    <label>Фамилия</label>
-    <input type="text" class="form-control" name="last_name">
-  </div>
-
-    <br>
-  <button type="submit" class="btn btn-primary">Регистрация</button>
-</form>
+    <form  method="post">{% csrf_token %}
+        <div >
+            <label>Имя пользователя</label>
+            <input type="text" class="form-control" name="username">
+        </div>
+        <div>
+            <label>Пороль</label>
+            <input type="password" class="form-control" name="password">
+        </div>
+        <div>
+            <label>Email</label>
+            <input type="email" class="form-control" name="email">
+        </div>
+        <div>
+            <label>Имя</label>
+            <input type="text" class="form-control" name="first_name">
+        </div>
+        <div>
+            <label>Фамилия</label>
+            <input type="text" class="form-control" name="last_name">
+        </div>
+        <br>
+        <button type="submit" class="btn btn-primary">Регистрация</button>
+    </form>
 </section>
+
 {% endblock %}

@@ -1,14 +1,12 @@
 <div class="dropdown">
-    <button class="btn btn-outline-secondary dropdown-toggle btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+    <button class="btn btn-outline-light dropdown-toggle btn-md" type="button" data-bs-toggle="dropdown" aria-expanded="false">
         <b>{{ user }}</b>
     </button>
-    <ul class="dropdown-menu dropdown-menu-end" >
+    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark">
         <li><a class="dropdown-item" href="{% url 'create' %}">Добавить пресет</a></li>
         <hr>
         <li><a class="dropdown-item" href="{% url 'private' %}">Мои пресеты</a></li>
-        <li><a class="dropdown-item" href="#">Something else here</a></li>
         <hr>
         <li><a class="dropdown-item" href="{% url 'logout' %}">Выйти</a></li>
-
     </ul>
 </div>
