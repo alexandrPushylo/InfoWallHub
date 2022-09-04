@@ -219,3 +219,5 @@ class CarouselView(ListView):
         return context
 
 
+def page_404_view(request):
+    raise Http404(request)
