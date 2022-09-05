@@ -4,7 +4,6 @@
     "settings": "settings.json", 
     "service": "cls_dev_service.pyw", 
     "frequency": 1, 
-    "workdir": "workdir", 
     "presets_dir": "presets", 
     "preset_config_file": "preset.json", 
     "param9": false

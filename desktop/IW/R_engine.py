@@ -22,7 +22,7 @@ class REngine():
     file_preview_name = 'sys_wall.jpeg' #self.preset_conf['file_preview'] = "sys_wall.jpeg"
     preset_json_file = 'preset.json'    #self.settings['preset_config_file'] = "preset.json"
     work_img_name = 'canvas'
-    work_img_path = f'{TETS_DIR}'#######    #self.settings['workdir'] = "workdir"
+    work_img_path = ''
     format_img = 'jpeg'
     widget_set = []
     Preset = Preset
@@ -36,8 +36,8 @@ class REngine():
         
         self.original_image_path = ''
         self.canvas = None
-        self.canvas_path =f"{path.dirname(__file__)}{sep}{self.settings.get('workdir', __class__.work_img_path)}{sep}{__class__.work_img_name}"
-               
+        self.canvas_path =f"{path.dirname(__file__)}{sep}{__class__.work_img_name}"
+        
         self.get_wall_to_buffer()
         self.push_img()
         self.init_preset()
@@ -54,9 +54,6 @@ class REngine():
         #read preset.json    
         try:
             preset_conf_name = self.settings.get('preset_config_file', __class__.preset_json_file)
-            if path.isfile(f"{self.settings['workdir']}{sep}{preset_conf_name}"):
-                preset_conf_name = self.settings['workdir'] + sep + preset_conf_name
-                
             with open(preset_conf_name, 'r') as fp:
                 self.preset_conf = json.load(fp)
         except Exception as e:
@@ -66,7 +63,10 @@ class REngine():
     def install_preset(self):
         preset_module = self.preset_conf['module']
         preset_class = self.preset_conf['class_name']
-        __class__.Preset = getattr(importlib.import_module(preset_module),preset_class)
+        try:
+            __class__.Preset = getattr(importlib.import_module(preset_module),preset_class)
+        except:
+            __class__.Preset = Preset
         
         
     def dump_preset(self):

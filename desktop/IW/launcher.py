@@ -66,8 +66,7 @@ class Launcher():
     def creat_works_space(self):
         if not path.isdir(self.settings['presets_dir']):
             mkdir(self.settings['presets_dir'])
-        if not path.isdir(self.settings['workdir']):
-            mkdir(self.settings['workdir'])
+        
         
         
         
