@@ -4,7 +4,6 @@ import json
 import importlib
 
 from os import chdir, sep, path
-from sys import argv
 from PIL import Image, ImageDraw, ImageFont, ImageChops
 
 
@@ -17,8 +16,6 @@ from PresetConstr import Preset #Demo mode
 
 #-------------------------------------------------------
 
-
-TETS_DIR = f"D:{sep}Temp{sep}t{sep}"
 
 class REngine():
     SETTINGS = 'settings.json'
@@ -120,7 +117,8 @@ class REngine():
     
     def init_preset(self):
         self.preset = __class__.Preset(
-            position=(100,100)
+            position=(100,100),
+            size=46
             )
         
         

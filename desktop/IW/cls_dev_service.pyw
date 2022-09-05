@@ -1,12 +1,7 @@
 import json
-from os import sep, path
-
-from datetime import datetime
 from time import sleep
 
 from R_engine import REngine 
-
-BUFFER = f"D:{sep}Temp{sep}t{sep}buffer.txt"
 
 class IWService():
     buffer = "buffer"
@@ -25,12 +20,12 @@ class IWService():
         except Exception as e:
             print(e)
             
-    def get_status(self):
+    def get_status(self):   #  async
         self.read_buffer()
         self.status = self.settings.get('status', False)
         return self.status
     
-    def waiting(self):
+    def waiting(self):  #  async
         freq = self.settings.get('frequency', __class__.frequency)
         sleep(freq)
         

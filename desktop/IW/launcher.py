@@ -5,14 +5,12 @@ from os import sep, path, mkdir
 import sys
 import subprocess
 
-# BUFFER = f"D:{sep}Temp{sep}t{sep}buffer.txt"######
 
 class Launcher():
         
     SETTINGS = 'settings.json'
     BUFFER = 'byffer'
-    # BUFFER = f"D:{sep}Temp{sep}t{sep}buffer.txt"######
-    
+        
     def __init__(self) -> None:
         self.read_settings()
         self.creat_works_space()
@@ -52,17 +50,17 @@ class Launcher():
             tar.add(self.settings['preset_config_file'])
             tar.add(param['file_preview'])
     
-    
+   
     
     def install_preset(self, preset_arch_name:str):
         if path.isfile(f"{self.settings['presets_dir']}{sep}{preset_arch_name}"):
             preset_module_name = preset_arch_name.replace('tar','py') 
             with tarfile.open(f"{self.settings['presets_dir']}{sep}{preset_arch_name}", 'r') as tar:
-                tar.extract(preset_module_name, self.settings['workdir'])
-                tar.extract(self.settings['preset_config_file'], self.settings['workdir'])
-            print(f"Модуль {preset_arch_name} разпакован!")
+                tar.extract(preset_module_name)
+                tar.extract(self.settings['preset_config_file'])
+            print(f"Пресет {preset_arch_name} установлен!")
         else:
-            print(f"Данный файл {preset_arch_name} не нейден!")
+            print(f"Данный пресет {preset_arch_name} не нейден!")
                 
 
     def creat_works_space(self):
