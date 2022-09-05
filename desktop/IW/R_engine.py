@@ -1,6 +1,8 @@
 import ctypes
 import io
 import json
+import importlib
+
 from os import chdir, sep, path
 from sys import argv
 from PIL import Image, ImageDraw, ImageFont, ImageChops
@@ -9,8 +11,9 @@ from PIL import Image, ImageDraw, ImageFont, ImageChops
 #----------connecting preset-------------------------
 # from preset_digital_clock import DigitalClock as Preset
 # from preset_simple_date import SimpleDate as Preset
+# from preset_complex_date import ComplexDate as Preset
 
-from preset_complex_date import ComplexDate as Preset
+from PresetConstr import Preset #Demo mode
 
 #-------------------------------------------------------
 
@@ -29,16 +32,15 @@ class REngine():
 
     def __init__(self) -> None:
         self.read_settings()
+        self.install_preset()
+        
         self._buffer = ctypes.create_unicode_buffer(360)
         self._byte_buffer = io.BytesIO()
         
         self.original_image_path = ''
         self.canvas = None
         self.canvas_path =f"{path.dirname(__file__)}{sep}{self.settings.get('workdir', __class__.work_img_path)}{sep}{__class__.work_img_name}"
-        
-        # self.settings.get('workdir', __class__.work_img_path) + __class__.work_img_name
-        
-        
+               
         self.get_wall_to_buffer()
         self.push_img()
         self.init_preset()
@@ -55,23 +57,28 @@ class REngine():
         #read preset.json    
         try:
             preset_conf_name = self.settings.get('preset_config_file', __class__.preset_json_file)
+            if path.isfile(f"{self.settings['workdir']}{sep}{preset_conf_name}"):
+                preset_conf_name = self.settings['workdir'] + sep + preset_conf_name
+                
             with open(preset_conf_name, 'r') as fp:
                 self.preset_conf = json.load(fp)
         except Exception as e:
             print(e)
-        
-    
+            
     
     def install_preset(self):
-        pass
-    
-    
+        preset_module = self.preset_conf['module']
+        preset_class = self.preset_conf['class_name']
+        __class__.Preset = getattr(importlib.import_module(preset_module),preset_class)
+        
+        
     def dump_preset(self):
         preset = {}
         preset['name'] = self.preset.name
         preset['widgets'] = self.preset.type
         preset['module'] = self.preset.__module__
-        preset['file_preview'] = __class__.file_preview_name
+        preset['class_name'] = self.preset.__class__.__name__
+        preset['file_preview'] = __class__.file_preview_name     
         with open(__class__.preset_json_file, 'w') as fp:
             json.dump(preset, fp)
         self.clean_canvas()
@@ -115,6 +122,7 @@ class REngine():
         self.preset = __class__.Preset(
             position=(100,100)
             )
+        
         
     def render(self):
         self.clean_canvas()

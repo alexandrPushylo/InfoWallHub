@@ -1,1 +1,1 @@
-{"name": "Complex date", "widgets": "date, time", "module": "preset_complex_date", "file_preview": "sys_wall.jpeg"}
+{"name": "Digital clock", "widgets": "clock", "module": "preset_digital_clock", "class_name": "DigitalClock", "file_preview": "sys_wall.jpeg"}
