@@ -35,7 +35,7 @@ def detail_preset_view(request, uu_id):
         except ObjectDoesNotExist:
             vote = Vote.objects.create(preset=preset, user=request.user, value=request.POST['vote'])
         total_vote = int(preset.sum_vote) + int(request.POST['vote'])
-        count_vote = len(Vote.objects.filter(preset=preset))
+        count_vote = len(Vote.objects.filter(preset=preset)) #TODO: count
         preset.rating = total_vote / count_vote
         preset.sum_vote = total_vote
         preset.save()
@@ -46,7 +46,7 @@ def detail_preset_view(request, uu_id):
 
 
 def upload_preset(request):
-    FILE_IMAGE_NAME = "sys_wall.jpeg"
+    FILE_IMAGE_NAME = "sys_wall.jpeg"   #TODO: module with constants
     FILE_CONFIG_NAME = "preset.json"
 
     if request.method == 'POST':
