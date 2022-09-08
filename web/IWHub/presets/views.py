@@ -196,7 +196,7 @@ class SearchPresetsView(ListView):
         if sort == 'sort_author':
             sort_list = self.object_list.order_by('author')
         elif sort == 'sort_rating':
-            sort_list = self.object_list.order_by('rating').reverse()
+            sort_list = self.object_list.order_by('rating').reverse()   #TODO: '-rating'
         else:
             sort_list = self.object_list.order_by('title')
 
@@ -211,7 +211,7 @@ class CarouselView(ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        reiting_list = Preset.objects.order_by('rating').reverse()
+        reiting_list = Preset.objects.order_by('rating').reverse()   #TODO: '-rating'
         len_list = len(reiting_list)//3
         n = randint(0, len_list)
         context['presets'] = reiting_list[n]
