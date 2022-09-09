@@ -26,5 +26,5 @@ urlpatterns = [
     path('signin/', signin_view, name="sign_in"),
     path('signup/', signup_view, name="sign_up"),
     path('logout', logout_view, name="logout"),
-    re_path(r'.*', page_404_view)
+    # re_path(r'.*', page_404_view)
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

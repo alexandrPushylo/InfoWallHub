@@ -1,8 +1,8 @@
 from django import forms
+from presets.models import Preset
 
 
-class UploadPresetForm(forms.Form):
-    archive = forms.FileField(label="Архив")
-    title = forms.CharField(max_length=255, label="Название")
-    description = forms.CharField(max_length=512, widget=forms.Textarea, label="Описание")
-    private = forms.BooleanField(label="Приватный", initial=True, required=False,)
+class UploadPresetForm(forms.ModelForm):
+    class Meta:
+        model = Preset
+        fields = 'archive', 'title', 'description', 'private'

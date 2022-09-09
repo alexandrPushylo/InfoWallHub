@@ -1,4 +1,3 @@
-import os
 from django.shortcuts import render
 from django.views.generic import ListView, UpdateView, DeleteView
 from django.http import HttpResponseRedirect, Http404
@@ -7,13 +6,14 @@ from django.db.models import Q
 from django.core.exceptions import ObjectDoesNotExist
 
 from django.contrib.auth.models import User
-from presets.models import Preset, Vote
+from presets.models import Preset, Vote, FileStorage
 from presets.forms import UploadPresetForm
 
 import shutil
 import tarfile
 import json
 from random import randint
+from presets.constants import *
 
 
 # Create your views here.
@@ -46,9 +46,6 @@ def detail_preset_view(request, uu_id):
 
 
 def upload_preset(request):
-    FILE_IMAGE_NAME = "sys_wall.jpeg"
-    FILE_CONFIG_NAME = "preset.json"
-
     if request.method == 'POST':
         archive = request.FILES.get('archive')
         title = request.POST['title']
@@ -57,15 +54,15 @@ def upload_preset(request):
         author = request.user
         preset = Preset(archive=archive, title=title, description=description,
                         private=private, author=author)
-        preset.image = f"storage/presets/{preset.uu_id}/{FILE_IMAGE_NAME}"
+        preset.image = f"storage/presets/{preset.uu_id}{SEP}{PRESET_PREVIEW_FILE_NAME}"
         preset.save()
 
-        with tarfile.open(f"storage/presets/{preset.uu_id}/{archive}", 'r') as tar:
-            tar.extract(FILE_IMAGE_NAME, f"storage\presets\{preset.uu_id}")
-            tar.extract(FILE_CONFIG_NAME, f"storage\presets\{preset.uu_id}")
+        with tarfile.open(f"{PRESETS_STORAGE_PATH}{SEP}{preset.uu_id}{SEP}{archive}", 'r') as tar:
+            tar.extract(PRESET_PREVIEW_FILE_NAME, f"{PRESETS_STORAGE_PATH}{SEP}{preset.uu_id}")
+            tar.extract(PRESET_CONFIG_FILE_NAME, f"{PRESETS_STORAGE_PATH}{SEP}{preset.uu_id}")
 
-        PATH_CONFIG_FILE = f"storage\presets\{preset.uu_id}\{FILE_CONFIG_NAME}"
-        with open(PATH_CONFIG_FILE, 'r') as fp:
+        config_file_path = f"{PRESETS_STORAGE_PATH}{SEP}{preset.uu_id}{SEP}{PRESET_CONFIG_FILE_NAME}"
+        with open(config_file_path, 'r') as fp:
             config = json.load(fp)
 
         widget_set = config['widgets']
@@ -83,7 +80,6 @@ class ListPresetsView(ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-
         if not self.request.user.is_anonymous:
             start_page = False
             presets = Preset.objects.filter(private=False)
@@ -133,7 +129,7 @@ class DeletePresetView(DeleteView):
         form = self.get_form()
         if form.is_valid():
             from IWHub.settings import MEDIA_ROOT
-            shutil.rmtree(f"{MEDIA_ROOT}{os.sep}presets{os.sep}{self.object.uu_id}",
+            shutil.rmtree(f"{PRESETS_STORAGE_PATH}{SEP}{self.object.uu_id}",
                           ignore_errors=True)
             return self.form_valid(form)
         else:
@@ -196,7 +192,7 @@ class SearchPresetsView(ListView):
         if sort == 'sort_author':
             sort_list = self.object_list.order_by('author')
         elif sort == 'sort_rating':
-            sort_list = self.object_list.order_by('rating').reverse()
+            sort_list = self.object_list.order_by('-rating')
         else:
             sort_list = self.object_list.order_by('title')
 
@@ -211,12 +207,25 @@ class CarouselView(ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        reiting_list = Preset.objects.order_by('rating').reverse()
-        len_list = len(reiting_list)//3
-        n = randint(0, len_list)
-        context['presets'] = reiting_list[n]
+        rating_list = Preset.objects.order_by('-rating')
+        if rating_list:
+            len_list = len(rating_list)//3
+            n = randint(0, len_list)
+            context['presets'] = rating_list[n]
+        else:
+            context['presets'] = None
         context['start_page'] = True
         return context
+
+
+def download_file(request, title):
+    if not request.user.is_anonymous:
+        try:
+            d_file = FileStorage.objects.get(title=title)
+            return HttpResponseRedirect(d_file.file.url)
+        except ObjectDoesNotExist:
+            pass
+    return HttpResponseRedirect('/')
 
 
 def page_404_view(request):

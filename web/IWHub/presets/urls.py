@@ -1,8 +1,6 @@
 from django.urls import path
-from presets.views import upload_preset, DeletePresetView, EditPresetView
-from presets.views import ListPresetsView
-from presets.views import detail_preset_view, SearchPresetsView
-from presets.views import CarouselView
+from presets.views import DeletePresetView, EditPresetView, ListPresetsView, SearchPresetsView, CarouselView
+from presets.views import upload_preset, detail_preset_view, download_file
 
 
 urlpatterns = [
@@ -14,6 +12,7 @@ urlpatterns = [
     path('delete/<uuid:uu_id>', DeletePresetView.as_view(), name="delete"),
     path('search', SearchPresetsView.as_view(), name='search'),
     path('create/', upload_preset, name="create"),
+    path('download/<str:title>', download_file, name="download"),
 
 ]
 
