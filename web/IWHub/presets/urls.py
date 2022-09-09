@@ -12,6 +12,7 @@ urlpatterns = [
     path('delete/<uuid:uu_id>', DeletePresetView.as_view(), name="delete"),
     path('search', SearchPresetsView.as_view(), name='search'),
     path('create/', upload_preset, name="create"),
+    path('download/<str:title>', download_file, name="download"),
 
 ]
 

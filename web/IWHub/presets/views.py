@@ -7,7 +7,7 @@ from django.db.models import Q
 from django.core.exceptions import ObjectDoesNotExist
 
 from django.contrib.auth.models import User
-from presets.models import Preset, Vote
+from presets.models import Preset, Vote, FileStorage
 from presets.forms import UploadPresetForm
 
 import shutil
@@ -219,6 +219,16 @@ class CarouselView(ListView):
             context['presets'] = None
         context['start_page'] = True
         return context
+
+
+def download_file(request, title):
+    if not request.user.is_anonymous:
+        try:
+            d_file = FileStorage.objects.get(title=title)
+            return HttpResponseRedirect(d_file.file.url)
+        except ObjectDoesNotExist:
+            pass
+    return HttpResponseRedirect('/')
 
 
 def page_404_view(request):

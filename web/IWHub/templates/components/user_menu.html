@@ -4,8 +4,10 @@
     </button>
     <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark">
         <li><a class="dropdown-item" href="{% url 'create' %}">Добавить пресет</a></li>
-        <hr>
         <li><a class="dropdown-item" href="{% url 'private' %}">Мои пресеты</a></li>
+        <hr>
+        <li><a class="dropdown-item" href="{% url 'download' 'IWDesktop' %}">Скачать IWDesktop</a></li>
+
         <hr>
         <li><a class="dropdown-item" href="{% url 'logout' %}">Выйти</a></li>
     </ul>
