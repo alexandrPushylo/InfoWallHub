@@ -192,7 +192,7 @@ class SearchPresetsView(ListView):
         if sort == 'sort_author':
             sort_list = self.object_list.order_by('author')
         elif sort == 'sort_rating':
-            sort_list = self.object_list.order_by('rating').reverse()   #TODO: '-rating'
+            sort_list = self.object_list.order_by('-rating')
         else:
             sort_list = self.object_list.order_by('title')
 
