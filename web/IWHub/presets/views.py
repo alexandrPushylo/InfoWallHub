@@ -35,7 +35,7 @@ def detail_preset_view(request, uu_id):
         except ObjectDoesNotExist:
             vote = Vote.objects.create(preset=preset, user=request.user, value=request.POST['vote'])
         total_vote = int(preset.sum_vote) + int(request.POST['vote'])
-        count_vote = len(Vote.objects.filter(preset=preset)) #TODO: count
+        count_vote = len(Vote.objects.filter(preset=preset))
         preset.rating = total_vote / count_vote
         preset.sum_vote = total_vote
         preset.save()
@@ -83,7 +83,6 @@ class ListPresetsView(ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-
         if not self.request.user.is_anonymous:
             start_page = False
             presets = Preset.objects.filter(private=False)
@@ -211,10 +210,13 @@ class CarouselView(ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        reiting_list = Preset.objects.order_by('rating').reverse()   #TODO: '-rating'
-        len_list = len(reiting_list)//3
-        n = randint(0, len_list)
-        context['presets'] = reiting_list[n]
+        rating_list = Preset.objects.order_by('-rating')
+        if rating_list:
+            len_list = len(rating_list)//3
+            n = randint(0, len_list)
+            context['presets'] = rating_list[n]
+        else:
+            context['presets'] = None
         context['start_page'] = True
         return context
 
