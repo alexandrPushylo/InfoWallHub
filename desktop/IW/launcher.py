@@ -19,12 +19,12 @@ class Launcher():
         self.settings['status'] = True
         self.write_buffer()
         subprocess.Popen(['python' ,'cls_dev_service.pyw'])
-        print(f'STARTING --> ')
+        print(f'START')
         
     def stop(self):
         self.settings['status'] = False
         self.write_buffer()
-        print('STOPING')
+        print('STOP')
         
     def read_settings(self):
         try:
@@ -44,11 +44,11 @@ class Launcher():
         param = {}
         with open('preset.json','r')as fp:
             param = json.load(fp)
-        print(param['module'])      ###################
         with tarfile.open(f"{self.settings['presets_dir']}{sep}{param['module']}.tar",'w') as tar:
             tar.add(param['module']+'.py')
             tar.add(self.settings['preset_config_file'])
             tar.add(param['file_preview'])
+        print(f"Создан архив -> {self.settings['presets_dir']}{sep}{param['module']}.tar")
     
    
     
@@ -75,7 +75,6 @@ def parse_cml():
     parser.add_argument('-c','--command',type=str)
     parser.add_argument('-i','--install', required=False,type=str)
     args = parser.parse_args()
-    print(args)#######
     return args
         
 def main():

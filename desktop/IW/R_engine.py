@@ -4,17 +4,9 @@ import json
 import importlib
 
 from os import chdir, sep, path
-from PIL import Image, ImageDraw, ImageFont, ImageChops
-
-
-#----------connecting preset-------------------------
-# from preset_digital_clock import DigitalClock as Preset
-# from preset_simple_date import SimpleDate as Preset
-# from preset_complex_date import ComplexDate as Preset
+from PIL import Image
 
 from PresetConstr import Preset #Demo mode
-
-#-------------------------------------------------------
 
 
 class REngine():
@@ -56,8 +48,8 @@ class REngine():
             preset_conf_name = self.settings.get('preset_config_file', __class__.preset_json_file)
             with open(preset_conf_name, 'r') as fp:
                 self.preset_conf = json.load(fp)
-        except Exception as e:
-            print(e)
+        except:
+            print("Demo mode")
             
     
     def install_preset(self):
@@ -130,15 +122,18 @@ class REngine():
 
 
 def main():
-    img = Image.new('RGB',size=(500,500))
+    chdir(path.dirname(__file__))
     re = REngine()
-    re.canvas = img
-    re.canvas_path = None
-    re.render()
-    img.show()
+    print(
+        re.settings,
+        re.canvas,
+        re.canvas_path,
+        re.original_image_path,
+        sep='\n'
+        )
     
 
 
 if __name__ == '__main__':
-    # main()
-    pass
+    main()
+    
