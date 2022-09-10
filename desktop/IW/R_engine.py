@@ -1,52 +1,77 @@
 import ctypes
 import io
 import json
+import importlib
+
 from os import chdir, sep, path
-from sys import argv
-from PIL import Image, ImageDraw, ImageFont, ImageChops
+from PIL import Image
 
+from PresetConstr import Preset #Demo mode
 
-#----------connecting preset-------------------------
-# from preset_digital_clock import Preset
-# from preset_simple_date import Preset
-
-from preset_complex_date import ComplexDate as Preset
-
-#-------------------------------------------------------
-
-
-TETS_DIR = f"D:{sep}Temp{sep}t{sep}"
 
 class REngine():
-    preset_json_file = 'preset.json'
+    SETTINGS = 'settings.json'
+    file_preview_name = 'sys_wall.jpeg' #self.preset_conf['file_preview'] = "sys_wall.jpeg"
+    preset_json_file = 'preset.json'    #self.settings['preset_config_file'] = "preset.json"
     work_img_name = 'canvas'
-    work_img_path = f'{TETS_DIR}'
+    work_img_path = ''
     format_img = 'jpeg'
     widget_set = []
     Preset = Preset
 
     def __init__(self) -> None:
+        self.read_settings()
+        self.install_preset()
+        
         self._buffer = ctypes.create_unicode_buffer(360)
         self._byte_buffer = io.BytesIO()
         
         self.original_image_path = ''
         self.canvas = None
-        self.canvas_path = f"{__class__.work_img_path}{__class__.work_img_name}"
+        self.canvas_path =f"{path.dirname(__file__)}{sep}{__class__.work_img_name}"
         
         self.get_wall_to_buffer()
         self.push_img()
         self.init_preset()
         self.dump_preset()
 
+
+    def read_settings(self):
+        #read setting.json
+        try:
+            with open(__class__.SETTINGS, 'r') as fp:
+                self.settings = json.load(fp)
+        except Exception as e:
+            print(e)
+        #read preset.json    
+        try:
+            preset_conf_name = self.settings.get('preset_config_file', __class__.preset_json_file)
+            with open(preset_conf_name, 'r') as fp:
+                self.preset_conf = json.load(fp)
+        except:
+            print("Demo mode")
+            
+    
+    def install_preset(self):
+        try:
+            preset_module = self.preset_conf['module']
+            preset_class = self.preset_conf['class_name']
+            __class__.Preset = getattr(importlib.import_module(preset_module),preset_class)
+        except:
+            __class__.Preset = Preset
+        
+        
     def dump_preset(self):
         preset = {}
         preset['name'] = self.preset.name
         preset['widgets'] = self.preset.type
         preset['module'] = self.preset.__module__
+        preset['class_name'] = self.preset.__class__.__name__
+        preset['file_preview'] = __class__.file_preview_name     
         with open(__class__.preset_json_file, 'w') as fp:
             json.dump(preset, fp)
         self.clean_canvas()
-        self.preset.draw(self.canvas,'sys_wall.jpeg')
+        self.preset.draw(self.canvas, __class__.file_preview_name)
         
 
     def get_wall_to_buffer(self):
@@ -84,8 +109,10 @@ class REngine():
     
     def init_preset(self):
         self.preset = __class__.Preset(
-            position=(100,100)
+            position=(100,100),
+            size=46
             )
+        
         
     def render(self):
         self.clean_canvas()
@@ -95,15 +122,18 @@ class REngine():
 
 
 def main():
-    img = Image.new('RGB',size=(500,500))
+    chdir(path.dirname(__file__))
     re = REngine()
-    re.canvas = img
-    re.canvas_path = None
-    re.render()
-    img.show()
+    print(
+        re.settings,
+        re.canvas,
+        re.canvas_path,
+        re.original_image_path,
+        sep='\n'
+        )
     
 
 
 if __name__ == '__main__':
-    # main()
-    pass
+    main()
+    

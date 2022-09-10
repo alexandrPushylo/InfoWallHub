@@ -6,7 +6,7 @@ class Preset():
     name = 'demo'
     w_type = 'demo'
     font = 'arial.ttf'
-    size = 72
+    size = 24
     
     def __init__(self, preset_name=None, preset_type=None, position=None, font=None, size = None, fill=None):
         self.name = preset_name if preset_name != None else __class__.name
@@ -38,9 +38,9 @@ class Preset():
         preset = cls()
         preset.draw(img, None)
         print(f"{preset.name=}\n{preset.type=}")
-        img.show()
+        img.show()         
 
 
 if __name__ == "__main__":
-    Preset.show_preset()
+    Preset.show_preset()  
     

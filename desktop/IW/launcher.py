@@ -1,29 +1,30 @@
 import argparse
 import json
 import tarfile
-from os import sep, path, system
+from os import sep, path, mkdir
 import sys
 import subprocess
 
-# BUFFER = f"D:{sep}Temp{sep}t{sep}buffer.txt"######
 
 class Launcher():
+        
     SETTINGS = 'settings.json'
-    BUFFER = f"D:{sep}Temp{sep}t{sep}buffer.txt"######
-    
+    BUFFER = 'byffer'
+        
     def __init__(self) -> None:
         self.read_settings()
+        self.creat_works_space()
         
     def start(self):
         self.settings['status'] = True
         self.write_buffer()
         subprocess.Popen(['python' ,'cls_dev_service.pyw'])
-        print(f'STARTING --> ')
+        print(f'START')
         
     def stop(self):
         self.settings['status'] = False
         self.write_buffer()
-        print('STOPING')
+        print('STOP')
         
     def read_settings(self):
         try:
@@ -34,7 +35,7 @@ class Launcher():
             
     def write_buffer(self):
         try:
-            with open(__class__.BUFFER, 'w') as fp:
+            with open(self.settings.get('buffer', __class__.BUFFER), 'w') as fp:
                 json.dump(self.settings, fp)
         except Exception as e:
             print(e)
@@ -43,19 +44,37 @@ class Launcher():
         param = {}
         with open('preset.json','r')as fp:
             param = json.load(fp)
-        print(param['module'])
-        with tarfile.open(param['module']+'.tar','w') as tar:
+        with tarfile.open(f"{self.settings['presets_dir']}{sep}{param['module']}.tar",'w') as tar:
             tar.add(param['module']+'.py')
-            tar.add('preset.json')
-            tar.add('sys_wall.jpeg')
+            tar.add(self.settings['preset_config_file'])
+            tar.add(param['file_preview'])
+        print(f"Создан архив -> {self.settings['presets_dir']}{sep}{param['module']}.tar")
+    
+   
+    
+    def install_preset(self, preset_arch_name:str):
+        if path.isfile(f"{self.settings['presets_dir']}{sep}{preset_arch_name}"):
+            preset_module_name = preset_arch_name.replace('tar','py') 
+            with tarfile.open(f"{self.settings['presets_dir']}{sep}{preset_arch_name}", 'r') as tar:
+                tar.extract(preset_module_name)
+                tar.extract(self.settings['preset_config_file'])
+            print(f"Пресет {preset_arch_name} установлен!")
+        else:
+            print(f"Данный пресет {preset_arch_name} не нейден!")
+                
+
+    def creat_works_space(self):
+        if not path.isdir(self.settings['presets_dir']):
+            mkdir(self.settings['presets_dir'])
+        
         
         
         
 def parse_cml():
     parser = argparse.ArgumentParser()
     parser.add_argument('-c','--command',type=str)
+    parser.add_argument('-i','--install', required=False,type=str)
     args = parser.parse_args()
-    print(args)#######
     return args
         
 def main():
@@ -67,7 +86,7 @@ def main():
     if comm == 'start': launch.start()
     elif comm == 'stop': launch.stop()
     elif comm == 'arch': launch.create_arch()
-    elif comm == '': pass
+    elif args.install != '': launch.install_preset(args.install)
     elif comm == '': pass
     elif comm == '': pass
     elif comm == '': pass

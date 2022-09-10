@@ -1,19 +1,14 @@
 import json
-from os import sep, path
-
-from datetime import datetime
 from time import sleep
 
 from R_engine import REngine 
 
-BUFFER = f"D:{sep}Temp{sep}t{sep}buffer.txt"
-
 class IWService():
-    buffer = "buffer.txt"
+    buffer = "buffer"
     frequency = 1
         
-    def __init__(self, buffer) -> None:
-        self.buffer = buffer
+    def __init__(self) -> None:
+        self.buffer = __class__.buffer
         self.settings = {}
         self.read_buffer()
         self.get_status()
@@ -25,27 +20,24 @@ class IWService():
         except Exception as e:
             print(e)
             
-    def get_status(self):
+    def get_status(self):   #  async
         self.read_buffer()
         self.status = self.settings.get('status', False)
         return self.status
     
-    def waiting(self):
+    def waiting(self):  #  async
         freq = self.settings.get('frequency', __class__.frequency)
         sleep(freq)
         
               
 def main():
-    iwservice = IWService(buffer=BUFFER)
+    iwservice = IWService()
     rend = REngine()
             
     while iwservice.get_status():
-        with open(f"D:{sep}Temp{sep}t{sep}log.txt" , 'a+') as fp:
-            fp.write(
-                f"{str(datetime.now())[:-7]}\n"
-                )  
-                
+                        
         rend.render()
+        
         iwservice.waiting()
     rend.restore_wall()
     
