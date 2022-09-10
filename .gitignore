@@ -132,6 +132,7 @@ celerybeat.pid
 *.sage.py
 
 # Environments
+.env.dev
 .env
 .venv
 env/
@@ -285,7 +286,6 @@ fabric.properties
 .idea/**/azureSettings.xml
 
 # End of https://www.toptal.com/developers/gitignore/api/django,pycharm
-*.tar
 *.sqlite3
 */__pycache__
 
