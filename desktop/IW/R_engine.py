@@ -53,9 +53,9 @@ class REngine():
             
     
     def install_preset(self):
-        preset_module = self.preset_conf['module']
-        preset_class = self.preset_conf['class_name']
         try:
+            preset_module = self.preset_conf['module']
+            preset_class = self.preset_conf['class_name']
             __class__.Preset = getattr(importlib.import_module(preset_module),preset_class)
         except:
             __class__.Preset = Preset
