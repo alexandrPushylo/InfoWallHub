@@ -1,11 +1,17 @@
 {
     "status": false, 
     "buffer": "buffer", 
-    "settings": "settings.json", 
-    "service": "cls_dev_service.pyw", 
     "frequency": 1, 
     "presets_dir": "presets", 
-    "preset_config_file": "preset.json", 
-    "param9": false
+    "preset_config_file": "preset.json",
+    "service_files":
+    {
+        "settings": "settings.json", 
+        "service": "cls_dev_service.pyw", 
+        "render_engine": "R_engine.py",
+        "preset_constr": "PresetConstr.py",
+        "launcher": "launcher.py"
+    }
+    
     
 }

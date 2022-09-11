@@ -68,7 +68,17 @@ class Launcher():
             mkdir(self.settings['presets_dir'])
         
         
-        
+def build_app():
+    app_name = "IWDesktop.tar"
+    try:
+        with open(Launcher.SETTINGS, 'r') as fp:
+            param = json.load(fp)
+        with tarfile.open(app_name, 'w') as tar:
+            for file in param["service_files"].values():
+                tar.add(file)
+        print(f"Приложение собрано в {app_name}")
+    except Exception as e:
+        print(e)
         
 def parse_cml():
     parser = argparse.ArgumentParser()
@@ -86,8 +96,8 @@ def main():
     if comm == 'start': launch.start()
     elif comm == 'stop': launch.stop()
     elif comm == 'arch': launch.create_arch()
+    elif comm == 'build': build_app()
     elif args.install != '': launch.install_preset(args.install)
-    elif comm == '': pass
     elif comm == '': pass
     elif comm == '': pass
     elif comm == '': pass
