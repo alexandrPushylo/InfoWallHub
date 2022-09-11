@@ -18,7 +18,7 @@ class Launcher():
     def start(self):
         self.settings['status'] = True
         self.write_buffer()
-        subprocess.Popen(['python' ,'cls_dev_service.pyw'])
+        subprocess.Popen(['python' ,'cls_dev_service.pyw'], creationflags=subprocess.DETACHED_PROCESS)
         print(f'START')
         
     def stop(self):
