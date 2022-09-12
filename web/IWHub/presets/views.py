@@ -105,7 +105,7 @@ class EditPresetView(UpdateView):
     success_url = '/private'
 
     def get_object(self, queryset=None):
-        uu_id = self.request.get_full_path().lstrip('/edit/')
+        uu_id = self.request.get_full_path().removeprefix("/edit/")
         return Preset.objects.get(uu_id=uu_id)
 
     def get_context_data(self, **kwargs):
@@ -121,7 +121,7 @@ class DeletePresetView(DeleteView):
     success_url = '/private'
 
     def get_object(self, queryset=None):
-        uu_id = self.request.get_full_path().lstrip('/delete/')
+        uu_id = self.request.get_full_path().removeprefix("/delete/")
         return Preset.objects.get(uu_id=uu_id)
 
     def post(self, request, *args, **kwargs):
